@@ -1,0 +1,42 @@
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updatedAt = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+create table users (
+	id serial primary key not null,
+	firstName varchar(30) not null,
+	lastName varchar(30) not null,
+	email varchar(64) unique not null,
+	password varchar(300) not null,
+	createdAt timestamp not null default now(),
+	updatedAt timestamp not null default now()
+);
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION trigger_set_timestamp();
+
+CREATE TABLE tasks (
+	id SERIAL PRIMARY KEY NOT NULL,
+	title TEXT NOT NULL,
+	content TEXT NOT NULL,
+	status VARCHAR(30) NOT NULL,
+	createdAt TIMESTAMP DEFAULT NOW() NOT NULL,
+	updatedAt TIMESTAMP DEFAULT NOW() NOT NULL,
+	userId INT,
+	CONSTRAINT fk_user
+		FOREIGN KEY(userId)
+			REFERENCES users(id)
+
+			ON DELETE CASCADE
+);
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON tasks
+FOR EACH ROW
+EXECUTE FUNCTION trigger_set_timestamp();
