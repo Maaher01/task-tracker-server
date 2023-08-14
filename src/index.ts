@@ -10,9 +10,10 @@ const app: Application = Express();
 
 const PORT = 3000;
 
-//middlewares
+//Middlewares
 app.use(cors({ credentials: true, origin: "http://localhost:4200" }));
 app.use(Express.json());
+app.use(Express.static("task-tracker"));
 
 //Routes
 app.use("/api/user", authRouter);
