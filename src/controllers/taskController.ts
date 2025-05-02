@@ -64,7 +64,7 @@ export const addTask = async (req: Request, res: Response) => {
 		});
 	} catch (error: any) {
 		res.status(500).json({
-			ststus: "failed",
+			status: "failed",
 			error: error.message,
 		});
 	}
